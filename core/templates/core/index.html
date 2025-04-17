@@ -2,8 +2,16 @@
 {% load static %}
 
 {% block content %}
+    <!-- Easter Banner -->
+    
+
     <!-- Hero Section -->
     <section id="inicio" class="hero">
+        <div class="video-background">
+            <video autoplay muted loop playsinline>
+                <source src="{% static 'videos/background.mp4' %}" type="video/mp4">
+            </video>
+        </div>
         <div class="overlay"></div>
         <div class="hero-content">
             <h1>R.A Portões</h1>
@@ -192,7 +200,7 @@
                             <i class="fab fa-whatsapp"></i>
                             <div class="whatsapp-info">
                                 <p>WhatsApp: (11) 94684-2275</p>
-                                <a href="https://wa.me/5511946842275" class="whatsapp-link" target="_blank">Clique aqui para conversar</a>
+                                <a href="https://wa.me/5511946842275?text=Olá! Gostaria de fazer um orçamento." class="whatsapp-float" target="_blank">Clique aqui para conversar</a>
                             </div>
                         </li>
                         <li>
@@ -240,8 +248,28 @@
 
 {% block extra_js %}
 <script>
-    // Header scroll effect
+    // Menu Mobile
     document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuBtn = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // Fechar menu ao clicar em um link
+        const navItems = document.querySelectorAll('.nav-links a');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Header scroll effect
         const header = document.querySelector('.header');
         const nav = document.querySelector('.nav');
         const logo = document.querySelector('.logo');
@@ -270,24 +298,26 @@
             track.style.transform = `translateX(-${index * width}px)`;
         }
 
-        nextBtn.addEventListener('click', () => {
-            index = (index + 1) % images.length;
-            updateCarousel();
-        });
+        if (nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => {
+                index = (index + 1) % images.length;
+                updateCarousel();
+            });
 
-        prevBtn.addEventListener('click', () => {
-            index = (index - 1 + images.length) % images.length;
-            updateCarousel();
-        });
+            prevBtn.addEventListener('click', () => {
+                index = (index - 1 + images.length) % images.length;
+                updateCarousel();
+            });
+        }
 
         window.addEventListener('resize', updateCarousel);
 
         // Iniciar o carrossel
-        updateCarousel();
-    });
+        if (track && images.length > 0) {
+            updateCarousel();
+        }
 
-    // Animação ao scroll
-    document.addEventListener('DOMContentLoaded', function() {
+        // Animação ao scroll
         const animateElements = document.querySelectorAll('.animate');
         
         function checkScroll() {
@@ -303,12 +333,6 @@
         
         window.addEventListener('scroll', checkScroll);
         checkScroll();
-    });
-
-    // Menu mobile
-    document.querySelector('.mobile-menu').addEventListener('click', function() {
-        this.classList.toggle('active');
-        document.querySelector('.nav-links').classList.toggle('active');
     });
 </script>
 {% endblock %} 

@@ -1,0 +1,23 @@
+/* Easter Banner */
+.easter-banner {
+    background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1000;
+}
+
+.easter-banner p {
+    margin: 0;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+} 
