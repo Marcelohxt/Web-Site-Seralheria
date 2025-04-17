@@ -128,4 +128,79 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+});
+
+// Arquivo principal de JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Site R.A Portões carregado!');
+
+    // Header scroll effect
+    const header = document.querySelector('.header');
+    const logo = document.querySelector('.logo');
+    
+    let lastScroll = 0;
+    let scrollTimer;
+    
+    window.addEventListener('scroll', () => {
+        // Adiciona classe scrolled quando rolar mais que 50px
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+            logo.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+            logo.classList.remove('scrolled');
+        }
+
+        // Controla o hide/show baseado na direção do scroll
+        const currentScroll = window.pageYOffset;
+        
+        // Não faz nada se estiver no topo
+        if (currentScroll <= 0) {
+            header.classList.remove('hide');
+            return;
+        }
+        
+        // Clear the timeout if it exists
+        clearTimeout(scrollTimer);
+        
+        if (currentScroll > lastScroll && !header.classList.contains('hide')) {
+            // Scrolling down
+            header.classList.add('hide');
+        } else if (currentScroll < lastScroll && header.classList.contains('hide')) {
+            // Scrolling up
+            header.classList.remove('hide');
+        }
+        
+        lastScroll = currentScroll;
+        
+        // Set a timeout to show the header after user stops scrolling
+        scrollTimer = setTimeout(() => {
+            header.classList.remove('hide');
+        }, 1000);
+    });
+
+    // Mobile menu toggle
+    const menuToggle = document.querySelector('.mobile-menu');
+    const nav = document.querySelector('.nav');
+    
+    if (menuToggle && nav) {
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
 }); 
