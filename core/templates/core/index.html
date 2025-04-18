@@ -173,6 +173,14 @@
         <span class="whatsapp-text">Fale conosco!</span>
     </a>
 
+    <!-- Aviso de Cookies -->
+    <div id="cookieConsent" class="cookie-consent">
+        <div class="cookie-content">
+            <p>Este site utiliza cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa <a href="/politica-de-privacidade" target="_blank">Política de Privacidade</a>.</p>
+            <button id="acceptCookies" class="cookie-button">Aceitar</button>
+        </div>
+    </div>
+
     <!-- Contato -->
     <section id="contato" class="contato">
         <div class="container">
@@ -248,6 +256,76 @@
 
 {% block extra_js %}
 <script>
+    // Google Analytics Events
+    document.addEventListener('DOMContentLoaded', function() {
+        // Rastreamento de cliques no WhatsApp
+        const whatsappButtons = document.querySelectorAll('.whatsapp-float, .whatsapp-button');
+        whatsappButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                gtag('event', 'whatsapp_click', {
+                    'event_category': 'contato',
+                    'event_label': this.getAttribute('href')
+                });
+            });
+        });
+
+        // Rastreamento de cliques no botão de orçamento
+        const orcamentoButtons = document.querySelectorAll('a[href="#contato"]');
+        orcamentoButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                gtag('event', 'orcamento_click', {
+                    'event_category': 'conversao',
+                    'event_label': this.textContent.trim()
+                });
+            });
+        });
+
+        // Rastreamento de visualização de portões
+        const portaoItems = document.querySelectorAll('.portao-item');
+        portaoItems.forEach(item => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        gtag('event', 'portao_view', {
+                            'event_category': 'engajamento',
+                            'event_label': item.querySelector('img').alt
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            observer.observe(item);
+        });
+
+        // Rastreamento de envio do formulário
+        const form = document.getElementById('form-contato');
+        if (form) {
+            form.addEventListener('submit', function() {
+                gtag('event', 'form_submit', {
+                    'event_category': 'conversao',
+                    'event_label': 'formulario_contato'
+                });
+            });
+        }
+    });
+
+    // Cookie Consent
+    document.addEventListener('DOMContentLoaded', function() {
+        const cookieConsent = document.getElementById('cookieConsent');
+        const acceptButton = document.getElementById('acceptCookies');
+        
+        // Verifica se o usuário já aceitou os cookies
+        if (!localStorage.getItem('cookieConsent')) {
+            cookieConsent.style.display = 'block';
+        }
+        
+        // Evento para aceitar os cookies
+        acceptButton.addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', 'true');
+            cookieConsent.style.display = 'none';
+        });
+    });
+
     // Menu Mobile
     document.addEventListener('DOMContentLoaded', function() {
         const mobileMenuBtn = document.querySelector('.mobile-menu');
